@@ -6,7 +6,7 @@ app.use(bodyParser.json());              // Support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // Support encoded bodies
 const axios = require('axios');
 const qs = require('query-string');
-
+var pgp = require('pg-promise')();
 const dbConfig = {
   host: 'db',
   port: 5432,
@@ -19,13 +19,14 @@ var db = pgp(dbConfig);
 
 // Set the view engine to ejs
 app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/'));// Set the relative path; makes accessing the resource directory easier
 
 
 // Home page - DON'T CHANGE
 app.get('/', function(req, res) {
   res.render('pages/main', {
-    my_title: "Main page",
+    my_title: "Home",
     items: '',
     error: false,
     message: ''
@@ -33,7 +34,7 @@ app.get('/', function(req, res) {
 });
 app.get('/main', function(req, res) {
   res.render('pages/main', {
-    my_title: "Main page",
+    my_title: "Home",
     items: '',
     error: false,
     message: ''

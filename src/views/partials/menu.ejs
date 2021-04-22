@@ -1,1 +1,11 @@
-
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3">
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+          <li class="nav-item <% if(my_title == "Home"){ %> <%- 'active' %> <% } %>">
+              <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item <% if(my_title == "Reviews") { %> <%- 'active' %> <% } %>">
+              <a class="nav-link" href="/reviews">Reviews</a>
+          </li>
+    </div>
+</nav>
