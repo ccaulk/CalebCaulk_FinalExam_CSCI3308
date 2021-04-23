@@ -28,7 +28,7 @@ services:
       - "5432"                                  # We need only expose port `5432` internally to node (not the host)
     volumes:
       - finalwebsite-db:/var/lib/postgresql/data  # Creates a docker managed volume to persist your data.
-      - ./init_data:/docker-entrypoint-initdb.d # Binds ./init_data to docker-entrypoint-initdb.d.
+      - ./db/init_data:/docker-entrypoint-initdb.d # Binds ./init_data to docker-entrypoint-initdb.d.
                                                 #   The postgres image will run any files in this directory on startup,
                                                 #   in our case the file `init_data/create.sql`
 
@@ -59,4 +59,3 @@ services:
 # be extra sure you've made a stable backup somewhere.
 volumes:
   finalwebsite-db: {}
-

@@ -23,7 +23,7 @@
       <%if(item){
       <!-- card group to have the picture line up -->
         var cards = '<div class="card-group">';
-        var card = '<div class="card"><div class="card-body">';
+        var card = '<div class="card border-0"><div class="card-body">';
         var title = item.Title;
         var poster = item.Poster;
         var cast = item.Actors;
@@ -36,7 +36,7 @@
         card += '</div></div>';
         cards += card;
         <!-- making a new card to add the other stats -->
-        card = '<div class="card"><div class="card-body">';
+        card = '<div class="card border-0"><div class="card-body">';
         card += '<h3 class="card-title">'+title+'</h3>';
         card += '</br>';
         card += '<h6 class = card-title>Cast:</h6>';
@@ -60,7 +60,7 @@
         ratings.forEach(function(rating){
           card += '<p class = card-text>'+rating.Source+': '+rating.Value+'</p>';
         })
-        card += '<a href="#" class="btn btn-primary">Add a Review</a>';
+        card += '<a href="#myModal" class="btn btn-info" data-toggle="modal">Add a Review</a>';
         card += '</div></div>';
         cards += card;
         cards += '</div>';
@@ -69,5 +69,29 @@
         <%- cards %>
       <% } %>
     </div>
+    <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Add a Review</h4>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <form class="" action="/main" method="post">
+                <div class="row">
+                  <div class="col-4">
+                    <label for="movieTitle">Movie Title: </label>
+                  </div>
+                  <div class="col-8">
+                    <input class="form-control" type="text" name="title" placeholder= <%-title%> disabled>
+                    <%console.log(title);%>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
 
 <%- include('../partials/footer'); -%>
