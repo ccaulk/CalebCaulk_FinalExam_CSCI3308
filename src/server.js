@@ -22,7 +22,7 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/'));// Set the relative path; makes accessing the resource directory easier
 
-
+global.globalString = '';
 // Home page - DON'T CHANGE
 app.get('/', function(req, res) {
   res.render('pages/main', {
@@ -34,11 +34,66 @@ app.get('/', function(req, res) {
 });
 
 app.get('/reviews', function(req,res){
-  res.render('pages/reviews',{
-    my_title: "Reviews",
-    reviews: '',
-    error: false,
-    message: ''
+  //query
+  var rs = "select * from reviews;";
+  //querying
+  //console.log(rs)
+  db.task('get-everything', task => {
+        return task.batch([
+            task.any(rs)
+        ]);
+    })
+  //returning the data back to the reviews page
+    .then(function (data) {
+      console.log(data[0]);
+      res.status(200).render('pages/reviews',{
+        my_title: "Reviews",
+        reviews: data,
+        error: false,
+        message: ''
+      });
+    })
+    .catch(function (err) {
+      console.log('error', err);
+      res.render('pages/reviews', { // Status code here
+        my_title: "Reviews",
+        reviews: '',
+        error: false,
+        message: ''
+      });
+  });
+});
+
+app.get('/reviews/filter', function(req,res){
+  //query
+  var title = req.query.filterWord;
+  console.log(title);
+  var rs = "select * from reviews where movie_title = '"+title+"';";
+  //querying
+  console.log(rs)
+  db.task('get-everything', task => {
+        return task.batch([
+            task.any(rs)
+        ]);
+    })
+  //returning the data back to the reviews page
+    .then(function (data) {
+      console.log(data[0]);
+      res.status(200).render('pages/reviews',{
+        my_title: "Reviews",
+        reviews: data,
+        error: false,
+        message: ''
+      });
+    })
+    .catch(function (err) {
+      console.log('error', err);
+      res.render('pages/reviews', { // Status code here
+        my_title: "Reviews",
+        reviews: '',
+        error: false,
+        message: ''
+      });
   });
 });
 
@@ -60,6 +115,8 @@ app.post('/main', function(req, res) {
           // Stuck? Look at the '/' route above
             //console.log(items);
            console.log(items.data);
+           globalString = items.data.Title;
+           console.log(globalString);
           res.render('pages/main',{
               my_title: "Home",
               item: items.data,
@@ -93,7 +150,7 @@ app.post('/main', function(req, res) {
 
 app.post('/main/addReview', function(req, res) {
     //update the table
-  var title = req;
+  var title = globalString;
   console.log(title);
   var review_name = req.body.reviewName;
   var review = req.body.review;
@@ -107,29 +164,9 @@ app.post('/main/addReview', function(req, res) {
   var update = "insert into reviews (movie_title,movie_review_name,movie_review,review_date) values ('"+title+"','"+review_name+"','"+review+"','"+date2+"');";
   console.log(update);
   //insert the review
-  db.task('get-everything', task => {
-        return task.batch([
-            task.any(update)
-        ]);
-    })
-  //returning the data back to the main page
-    .then(function (data) {
-      res.status(200).render('pages/reviews',{
-        my_title: "Reviews",
-        reviews: '',
-        error: false,
-        message: ''
-      });
-    })
-    .catch(function (err) {
-      console.log('error', err);
-      res.render('pages/reviews', { // Status code here
-        my_title: "Reviews",
-        reviews: '',
-        error: false,
-        message: ''
-      });
-  });
+  db.one(update)
+  //returning to the reviews page
+  res.redirect('/reviews');
 });
 
 app.listen(3000);

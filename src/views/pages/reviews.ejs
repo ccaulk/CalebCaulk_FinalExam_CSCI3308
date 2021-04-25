@@ -1,5 +1,44 @@
 <%- include('../partials/header'); -%>
 <%- include('../partials/menu'); -%> 
 
+<h3>Movie Reviews</h3>
+<form id="review" action="/reviews/filter" method="get">
+    <div class="row">
+        <div class="col-4">
+            <input class="form-control" type="text" name="filterWord" placeholder="Enter Filter">
+        </div>
+        <div class="col-1">
+            <input class="btn btn-info" type="submit" name="Filter" value = "Filter"/>
+        </div>
+    </div>
+</form>
+</br>
+<div class = "container-fluid">
+	<table class = "table table-bordered">
+		<thead>
+		<tr>
+			<th>Movie Name</th>
+			<th>Review</th>
+			<th>Review Date</th>
+		</tr>
+		</thead>
+		<tbody>
+			<% if(reviews){
+				var tab = '';
+				var t = '<tr>';
+				reviews[0].forEach(function(rev){
+					console.log(rev);
+					t += '<td>'+rev.movie_title+'</td>';
+					t += '<td>'+rev.movie_review+'</td>';
+					t += '<td>'+rev.review_date+'</td>';
+					t += '</tr>';
+					tab += t;
+					t = '';
+				})
+			}%>
+			<%-tab%>
+		</tbody>
+	</table>
+</div>
 
 <%- include('../partials/footer'); -%>
