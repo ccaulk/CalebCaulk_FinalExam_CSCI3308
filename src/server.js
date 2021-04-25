@@ -7,15 +7,24 @@ app.use(bodyParser.urlencoded({ extended: true })); // Support encoded bodies
 const axios = require('axios');
 const qs = require('query-string');
 var pgp = require('pg-promise')();
-const dbConfig = {
+const dev_dbConfig = {
   host: 'db',
   port: 5432,
-  database: 'reviews_db',
-  user: 'postgres',
-  password: 'pwd'
+  database: process.env.POSTGRES_DB,
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD
 };
 
-var db = pgp(dbConfig);
+
+const isProduction = process.env.NODE_ENV === 'production';
+const dbConfig = isProduction ? process.env.DATABASE_URL : dev_dbConfig;
+
+// fixes: https://github.com/vitaly-t/pg-promise/issues/711
+if (isProduction) {
+  pgp.pg.defaults.ssl = {rejectUnauthorized: false};
+}
+
+let db = pgp(dbConfig);
 
 // Set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -175,5 +184,9 @@ app.post('/main/addReview', function(req, res) {
   res.redirect('/reviews');
 });
 
-module.exports = app.listen(3000);
-console.log('3000 is the magic port');
+// module.exports = app.listen(3000);
+// console.log('3000 is the magic port');
+//app.listen(3000);
+const server = app.listen(process.env.PORT || 3000, () => {
+  console.log(`Express running → PORT ${server.address().port}`);
+});
