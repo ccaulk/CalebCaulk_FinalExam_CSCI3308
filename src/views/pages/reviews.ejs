@@ -26,7 +26,7 @@
 			<% if(reviews){
 				var tab = '';
 				var t = '<tr>';
-				reviews[0].forEach(function(rev){
+				reviews.forEach(function(rev){
 					console.log(rev);
 					t += '<td>'+rev.movie_title+'</td>';
 					t += '<td>'+rev.movie_review+'</td>';

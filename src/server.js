@@ -45,10 +45,10 @@ app.get('/reviews', function(req,res){
     })
   //returning the data back to the reviews page
     .then(function (data) {
-      console.log(data[0]);
+      //console.log(data[0]);
       res.status(200).render('pages/reviews',{
         my_title: "Reviews",
-        reviews: data,
+        reviews: data[0],
         error: false,
         message: ''
       });
@@ -69,19 +69,25 @@ app.get('/reviews/filter', function(req,res){
   var title = req.query.filterWord;
   console.log(title);
   var rs = "select * from reviews where movie_title = '"+title+"';";
+  var rws = "select * from reviews;";
+  var index = 0;
   //querying
   console.log(rs)
   db.task('get-everything', task => {
         return task.batch([
-            task.any(rs)
+            task.any(rs),
+            task.any(rws)
         ]);
     })
   //returning the data back to the reviews page
     .then(function (data) {
       console.log(data[0]);
+      if(data[0].length == 0){
+        index = 1;
+      }
       res.status(200).render('pages/reviews',{
         my_title: "Reviews",
-        reviews: data,
+        reviews: data[index],
         error: false,
         message: ''
       });
