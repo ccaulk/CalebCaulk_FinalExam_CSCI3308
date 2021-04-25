@@ -15,7 +15,7 @@ var assert = chai.assert;
 describe("Server!", () => {
 	//test case 1 
 	//testing if the reviews page loads correctly
-	it("Making sure that the reviews", done => {
+	it("Making sure that the reviews load", done => {
 		//making sure resorts page loads
       chai
         .request(server)
@@ -28,7 +28,7 @@ describe("Server!", () => {
 
     //test case 2 
 	//testing adding a review works
-	it("Making sure that the reviews", done => {
+	it("Making sure that the adding a review works", done => {
 		//making sure resorts page loads and review was added
       chai
         .request(server)

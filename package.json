@@ -23,7 +23,7 @@
         "node": "12.x"
     },
     "scripts": {
-        "test": "mocha",
+        "test": "mocha 'src/test/**/*.js'",
         "start": "node src/server.js",
         "dev": "nodemon src/server.js",
         "testandrun": "npm-run-all test start"
