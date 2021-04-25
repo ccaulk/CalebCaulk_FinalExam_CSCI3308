@@ -8,7 +8,7 @@ services:
     env_file: .env
     volumes:
       - ./db/init_data:/docker-entrypoint-initdb.d
-      - lab10-db-volume:/var/lib/postgresql/data  
+      - finalwebsite-db:/var/lib/postgresql/data  
 
   web:
     build: 
